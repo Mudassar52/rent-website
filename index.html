@@ -1,0 +1,2136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SoftRent — Pakistan's #1 Software Rental Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #f0f0f5;
+      overflow-x: hidden;
+      min-height: 100vh;
+      width: 100%;
+      position: relative;
+    }
+
+    /* ══════════════════════════════
+       PAGE WRAPPER  (white card)
+    ══════════════════════════════ */
+    .page {
+      position: relative;
+      max-width: 1280px;
+      margin: 0 auto;
+      background: #f3f3f8;
+      min-height: 100vh;
+      overflow-x: hidden;
+      overflow-y: visible;
+      padding-top: 76px;
+    }
+
+    /* ══════════════════════════════
+       BACKGROUND BLOBS
+    ══════════════════════════════ */
+    .blob {
+      position: absolute;
+      pointer-events: none;
+      border-radius: 50%;
+      overflow: hidden;
+    }
+
+    /* top-right large pink/purple blob */
+    .blob-tr {
+      width: 480px; height: 480px;
+      top: -120px; right: -80px;
+      background: radial-gradient(circle at 40% 40%,
+        #e879f9 0%,
+        #c026d3 30%,
+        #a855f7 55%,
+        rgba(168,85,247,0) 75%);
+      filter: blur(0px);
+      opacity: 0.85;
+      border-radius: 50%;
+      max-width: 60vw;
+    }
+
+    /* bottom-left wave blob */
+    .blob-bl {
+      width: 340px; height: 320px;
+      bottom: 0; left: 0;
+      background: linear-gradient(135deg, #c4b5fd 0%, #a78bfa 40%, #ddd6fe 80%);
+      clip-path: ellipse(60% 50% at 10% 90%);
+      opacity: 0.9;
+      filter: blur(2px);
+    }
+
+    /* extra soft glow top-right behind the blob */
+    .blob-tr-glow {
+      width: 600px; height: 500px;
+      top: -200px; right: -150px;
+      background: radial-gradient(circle, rgba(232,121,249,.35) 0%, transparent 70%);
+      filter: blur(60px);
+    }
+
+    /* ══════════════════════════════
+       NAVIGATION
+    ══════════════════════════════ */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 1000;
+      display: flex; align-items: center;
+      padding: 0 clamp(1.5rem, 4vw, 3.5rem);
+      height: 76px;
+      gap: 1rem;
+      background: rgba(243,243,248,.97);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(168,85,247,.12);
+      box-shadow: 0 2px 20px rgba(0,0,0,.06);
+    }
+
+
+
+    /* Logo */
+    .nav-logo {
+      display: flex; align-items: center; gap: .6rem;
+      text-decoration: none; flex-shrink: 0;
+    }
+    .logo-icon {
+      width: 40px; height: 40px; border-radius: 12px;
+      background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+      display: grid; place-items: center;
+      box-shadow: 0 4px 14px rgba(124,58,237,.4);
+    }
+    .logo-icon svg {
+      width: 22px; height: 22px; fill: none;
+      stroke: #fff; stroke-width: 2;
+    }
+    .logo-text {
+      font-size: 1.3rem; font-weight: 800;
+      color: #1a1a2e; letter-spacing: -.02em;
+    }
+
+    /* Center pill menu */
+    .nav-menu-wrap {
+      flex: 1; display: flex; justify-content: center;
+    }
+    .nav-menu {
+      display: flex; align-items: center; gap: .2rem;
+      background: #ffffff;
+      border-radius: 50px;
+      padding: .45rem .6rem;
+      list-style: none;
+      box-shadow: 0 2px 16px rgba(0,0,0,.07);
+    }
+    .nav-menu a {
+      display: block;
+      padding: .45rem 1.1rem;
+      font-size: .9rem; font-weight: 500;
+      color: #374151; text-decoration: none;
+      border-radius: 50px;
+      transition: background .2s, color .2s;
+      white-space: nowrap;
+    }
+    .nav-menu a:hover {
+      background: #f5f3ff;
+      color: #7c3aed;
+    }
+
+    /* Right CTA */
+    .btn-trial {
+      flex-shrink: 0;
+      display: inline-flex; align-items: center; gap: .3rem;
+      padding: .65rem 1.5rem;
+      border-radius: 50px;
+      font-size: .9rem; font-weight: 700;
+      color: #fff; text-decoration: none;
+      background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+      box-shadow: 0 4px 18px rgba(124,58,237,.4);
+      transition: transform .2s, box-shadow .2s;
+      white-space: nowrap;
+    }
+    .btn-trial:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(124,58,237,.5);
+    }
+
+    /* Hamburger */
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      background: none; border: none; cursor: pointer;
+      padding: 4px; margin-left: auto;
+    }
+    .hamburger span {
+      display: block; width: 24px; height: 2.5px;
+      border-radius: 3px; background: #374151;
+      transition: all .3s;
+    }
+
+    /* ══════════════════════════════
+       HERO SECTION
+    ══════════════════════════════ */
+    .hero {
+      position: relative; z-index: 10;
+      display: flex; align-items: center;
+      min-height: calc(100vh - 76px);
+      padding: 0 clamp(1.5rem, 4vw, 3.5rem);
+      gap: 0;
+    }
+
+    /* ── LEFT ── */
+    .hero-left {
+      flex: 0 0 clamp(300px, 45%, 520px);
+      padding: 2rem 0 3rem;
+      display: flex; flex-direction: column;
+      gap: 0;
+    }
+
+    .badge-pill {
+      display: inline-flex; align-items: center;
+      padding: .42rem 1.1rem;
+      border: 1.5px solid #a855f7;
+      border-radius: 50px;
+      width: fit-content;
+      margin-bottom: 1.5rem;
+      background: rgba(168,85,247,.06);
+    }
+    .badge-pill span {
+      font-size: .8rem; font-weight: 600;
+      color: #7c3aed; letter-spacing: .01em;
+    }
+
+    .hero-title {
+      font-size: clamp(2.1rem, 4.2vw, 3.4rem);
+      font-weight: 800;
+      color: #0f0f1a;
+      line-height: 1.13;
+      letter-spacing: -.04em;
+      margin-bottom: 1.3rem;
+      position: relative;
+    }
+
+    /* small purple arrow accent like in the design */
+    .accent-arrow {
+      display: inline-block;
+      margin-left: .3rem;
+      color: #a855f7;
+      font-size: 1.8rem;
+      font-weight: 400;
+      vertical-align: middle;
+      line-height: 1;
+      font-style: normal;
+      transform: rotate(-10deg);
+    }
+
+    .hero-desc {
+      font-size: .95rem; font-weight: 400;
+      color: #6b7280; line-height: 1.75;
+      max-width: 400px;
+      margin-bottom: 2.2rem;
+    }
+
+    .btn-cta {
+      display: inline-flex; align-items: center; gap: .5rem;
+      padding: .85rem 2rem;
+      border-radius: 50px;
+      font-size: 1rem; font-weight: 700;
+      color: #fff; text-decoration: none;
+      background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+      box-shadow: 0 6px 24px rgba(124,58,237,.4);
+      width: fit-content;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .btn-cta:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 34px rgba(124,58,237,.5);
+    }
+    .btn-cta .arrow {
+      font-size: 1.1rem;
+      transform: rotate(-45deg);
+      display: inline-block;
+    }
+
+    /* ── RIGHT ── */
+    .hero-right {
+      flex: 1;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      align-self: stretch;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-img-wrap {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      top: -30px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    .hero-img-wrap img {
+      width: 100%;
+      max-width: 780px;
+      height: 100%;
+      object-fit: contain;
+      object-position: bottom center;
+      display: block;
+    }
+
+    /* ══════════════════════════════
+       MOBILE MENU
+    ══════════════════════════════ */
+    .mobile-nav {
+      display: none;
+      position: fixed; top: 76px; left: 0; right: 0;
+      background: rgba(255,255,255,.97);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid #e9d5ff;
+      padding: 1.5rem clamp(1.5rem,4vw,3.5rem) 2rem;
+      z-index: 200;
+      flex-direction: column; gap: 1rem;
+    }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav a {
+      font-size: 1rem; font-weight: 500; color: #374151;
+      text-decoration: none; padding: .3rem 0;
+      border-bottom: 1px solid #f3e8ff;
+    }
+    .mobile-nav a:last-child { border: none; }
+    .mobile-nav .btn-trial {
+      display: block; text-align: center; margin-top: .5rem;
+    }
+
+    /* ══════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════ */
+    @media (max-width: 900px) {
+      .nav-menu-wrap, .btn-trial { display: none; }
+      .hamburger { display: flex; }
+
+      .hero {
+        flex-direction: column;
+        min-height: auto;
+        padding-bottom: 2rem;
+        gap: 2rem;
+      }
+      .hero-left {
+        flex: unset; width: 100%;
+        text-align: center; align-items: center;
+        padding-top: 2.5rem;
+      }
+      .hero-right {
+        width: 100%; min-height: 420px;
+        position: relative;
+      }
+      .hero-img-wrap {
+        position: relative; top: unset; bottom: unset;
+        left: unset; right: unset;
+        height: 460px;
+      }
+      .hero-img-wrap img {
+        height: 115%; width: 115%;
+        object-position: bottom center;
+        padding-bottom: 100px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-title { font-size: 1.9rem; }
+      .hero-img-wrap { height: 380px; }
+    }
+
+    /* ══════════════════════════════
+       FEATURES SECTION
+    ══════════════════════════════ */
+    .features {
+      position: relative; z-index: 10;
+      padding: clamp(4rem, 8vw, 7rem) clamp(1.5rem, 4vw, 3.5rem);
+      background: #fff;
+    }
+
+    .section-label {
+      display: inline-flex; align-items: center; gap: .5rem;
+      padding: .38rem 1rem;
+      border: 1.5px solid #a855f7;
+      border-radius: 50px;
+      background: rgba(168,85,247,.06);
+      margin-bottom: 1rem;
+    }
+    .section-label span {
+      font-size: .78rem; font-weight: 700;
+      color: #7c3aed; letter-spacing: .06em; text-transform: uppercase;
+    }
+
+    .section-heading {
+      font-size: clamp(1.8rem, 3.5vw, 2.9rem);
+      font-weight: 800; color: #0f0f1a;
+      letter-spacing: -.04em; line-height: 1.15;
+      max-width: 640px; margin-bottom: .9rem;
+    }
+    .section-heading em {
+      font-style: normal;
+      background: linear-gradient(120deg, #a855f7, #ec4899);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .section-sub {
+      font-size: .98rem; color: #6b7280; line-height: 1.7;
+      max-width: 520px; margin-bottom: 3.5rem;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 1.6rem;
+    }
+
+    .feat-card {
+      background: #faf9ff;
+      border: 1.5px solid #ede9fe;
+      border-radius: 20px;
+      padding: 1.8rem 1.6rem;
+      transition: transform .25s, box-shadow .25s, border-color .25s;
+      cursor: default;
+    }
+    .feat-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 48px rgba(124,58,237,.1);
+      border-color: #a855f7;
+    }
+
+    .feat-icon {
+      width: 52px; height: 52px; border-radius: 14px;
+      display: grid; place-items: center;
+      margin-bottom: 1.2rem;
+      font-size: 1.5rem;
+    }
+
+    .feat-title {
+      font-size: 1.05rem; font-weight: 700;
+      color: #0f0f1a; margin-bottom: .5rem;
+      letter-spacing: -.02em;
+    }
+
+    .feat-desc {
+      font-size: .88rem; color: #6b7280; line-height: 1.65;
+    }
+
+    .ic-purple { background: #f3e8ff; }
+    .ic-pink    { background: #fce7f3; }
+    .ic-blue    { background: #dbeafe; }
+    .ic-green   { background: #d1fae5; }
+    .ic-orange  { background: #ffedd5; }
+    .ic-cyan    { background: #cffafe; }
+
+    /* feat-icon SVG centering */
+    .feat-icon {
+      display: grid; place-items: center;
+    }
+
+    /* ══════════════════════════════
+       SOLUTIONS / USE CASES SECTION
+    ══════════════════════════════ */
+    .solutions {
+      position: relative; z-index: 10;
+      background: #f3f3f8;
+      padding: clamp(4rem, 8vw, 7rem) clamp(1.5rem, 4vw, 3.5rem);
+    }
+    .solutions-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    .solutions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.8rem;
+      margin-top: 0;
+    }
+    .sol-card {
+      background: #fff;
+      border: 1.5px solid #ede9fe;
+      border-radius: 22px;
+      padding: 2rem 1.8rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      transition: transform .25s, box-shadow .25s, border-color .25s;
+    }
+    .sol-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 48px rgba(124,58,237,.1);
+      border-color: #a855f7;
+    }
+    .sol-icon {
+      width: 60px; height: 60px;
+      border-radius: 16px;
+      display: grid; place-items: center;
+      flex-shrink: 0;
+    }
+    .sol-body { display: flex; flex-direction: column; gap: .6rem; }
+    .sol-title {
+      font-size: 1.15rem; font-weight: 700;
+      color: #0f0f1a; letter-spacing: -.02em;
+    }
+    .sol-desc {
+      font-size: .88rem; color: #6b7280; line-height: 1.65;
+    }
+    .sol-list {
+      list-style: none;
+      display: flex; flex-direction: column; gap: .5rem;
+      margin-top: .4rem;
+    }
+    .sol-list li {
+      display: flex; align-items: center; gap: .5rem;
+      font-size: .85rem; font-weight: 500; color: #374151;
+    }
+
+    /* ══════════════════════════════
+       PRICING SECTION
+    ══════════════════════════════ */
+    .pricing-sec {
+      background: #fff;
+      padding: clamp(4rem, 8vw, 7rem) clamp(1.5rem, 4vw, 3.5rem);
+      position: relative; z-index: 10;
+    }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.6rem;
+      margin-top: 1rem;
+    }
+    .price-card {
+      background: #faf9ff;
+      border: 1.5px solid #ede9fe;
+      border-radius: 22px;
+      padding: 2rem 1.8rem;
+      display: flex; flex-direction: column;
+      position: relative;
+      transition: transform .25s, box-shadow .25s;
+    }
+    .price-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 48px rgba(124,58,237,.1);
+    }
+    .price-card--featured {
+      background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+      border-color: transparent;
+    }
+    .price-card--featured .price-name,
+    .price-card--featured .price-amount,
+    .price-card--featured .price-desc { color: #fff; }
+    .price-card--featured .price-amount span { color: rgba(255,255,255,.7); }
+    .price-features {
+      list-style: none;
+      display: flex; flex-direction: column; gap: .55rem;
+      margin-top: 1.2rem; flex: 1;
+    }
+    .price-features li {
+      display: flex; align-items: flex-start; gap: .55rem;
+      font-size: .85rem; color: #374151; line-height: 1.4;
+    }
+    .price-card--featured .price-features li { color: rgba(255,255,255,.9); }
+    .price-features li svg { flex-shrink: 0; margin-top: 1px; }
+    .price-card--lifetime {
+      background: linear-gradient(135deg, #0f0f1a 0%, #1a1a3e 100%);
+      border-color: #7c3aed;
+    }
+    .price-card--lifetime .price-name,
+    .price-card--lifetime .price-amount,
+    .price-card--lifetime .price-desc { color: #fff; }
+    .price-card--lifetime .price-amount span { color: rgba(255,255,255,.6); }
+    .price-card--lifetime .price-features li { color: rgba(255,255,255,.85); }
+    .price-card--lifetime .price-badge { background: #f59e0b; }
+    .price-badge {
+      position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+      background: #ec4899; color: #fff;
+      font-size: .72rem; font-weight: 700; letter-spacing: .06em;
+      padding: .3rem .9rem; border-radius: 50px;
+      white-space: nowrap;
+    }
+    .price-name {
+      font-size: 1rem; font-weight: 700; color: #6b7280;
+      text-transform: uppercase; letter-spacing: .06em;
+      margin-bottom: .5rem;
+    }
+    .price-amount {
+      font-size: 2rem; font-weight: 800; color: #0f0f1a;
+      letter-spacing: -.03em; margin-bottom: .6rem;
+    }
+    .price-amount span { font-size: 1rem; font-weight: 500; color: #9ca3af; }
+    .price-desc { font-size: .88rem; color: #6b7280; line-height: 1.6; }
+
+    /* ══════════════════════════════
+       CONTACT SECTION
+    ══════════════════════════════ */
+    .contact-sec {
+      background: #f3f3f8;
+      padding: clamp(4rem, 8vw, 7rem) clamp(1.5rem, 4vw, 3.5rem);
+      position: relative; z-index: 10;
+    }
+    .contact-inner { max-width: 1280px; margin: 0 auto; }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 3rem;
+      margin-top: 1rem;
+    }
+    @media (max-width: 760px) {
+      .contact-grid { grid-template-columns: 1fr; }
+    }
+    .contact-info { display: flex; flex-direction: column; gap: 1.8rem; }
+    .contact-item {
+      display: flex; align-items: flex-start; gap: 1rem;
+    }
+    .contact-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: #f3e8ff;
+      display: grid; place-items: center; flex-shrink: 0;
+    }
+    .contact-label { font-size: .78rem; font-weight: 600; color: #9ca3af; text-transform: uppercase; letter-spacing: .06em; margin-bottom: .2rem; }
+    .contact-val { font-size: .97rem; font-weight: 600; color: #0f0f1a; }
+    .contact-form-wrap { display: flex; flex-direction: column; gap: 1rem; }
+    .cf-input {
+      width: 100%; padding: .85rem 1.2rem;
+      border: 1.5px solid #e5e7eb;
+      border-radius: 14px;
+      font-family: inherit; font-size: .93rem; color: #0f0f1a;
+      background: #fff;
+      outline: none;
+      transition: border-color .2s;
+    }
+    .cf-input:focus { border-color: #a855f7; }
+    .cf-textarea { min-height: 120px; resize: vertical; }
+
+    /* ══════════════════════════════
+       HERO SOCIAL PROOF
+    ══════════════════════════════ */
+    .hero-social-proof {
+      display: flex; align-items: center; gap: 1rem;
+      margin-top: 1.8rem; flex-wrap: wrap;
+    }
+    .sp-avatars {
+      display: flex; align-items: center;
+    }
+    .sp-av {
+      width: 34px; height: 34px; border-radius: 50%;
+      display: grid; place-items: center;
+      font-size: .6rem; font-weight: 800; color: #fff;
+      border: 2.5px solid #f3f3f8;
+      margin-left: -8px; first-child { margin-left: 0; }
+      flex-shrink: 0;
+    }
+    .sp-av:first-child { margin-left: 0; }
+    .sp-av-more {
+      background: #7c3aed !important;
+      font-size: .65rem;
+    }
+    .sp-stars { color: #f59e0b; font-size: .85rem; letter-spacing: 1px; margin-bottom: 2px; }
+    .sp-label { font-size: .82rem; color: #6b7280; }
+    .sp-label strong { color: #0f0f1a; }
+
+    /* ══════════════════════════════
+       SHOWCASE / CLIENTS SECTION
+    ══════════════════════════════ */
+    .showcase-sec {
+      background: #fff;
+      padding: clamp(4rem, 8vw, 7rem) clamp(1.5rem, 4vw, 3.5rem);
+      position: relative; z-index: 10;
+      text-align: center;
+    }
+    .showcase-sec .section-heading,
+    .showcase-sec .section-sub {
+      max-width: 640px;
+      margin-left: auto; margin-right: auto;
+    }
+    .showcase-sec .section-sub { margin-bottom: 3rem; }
+    .showcase-img-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.4rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .showcase-img-item {
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1.5px solid #ede9fe;
+      aspect-ratio: 4/3;
+      background: #f3f3f8;
+      transition: transform .25s, box-shadow .25s;
+    }
+    .showcase-img-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 16px 48px rgba(124,58,237,.12);
+    }
+    .showcase-img-item img {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+    }
+    @media (max-width: 640px) {
+      .showcase-img-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 420px) {
+      .showcase-img-grid { grid-template-columns: 1fr; }
+    }
+    .faq-sec {
+      background: #fff;
+      padding: clamp(4rem, 8vw, 7rem) clamp(1.5rem, 4vw, 3.5rem);
+      position: relative; z-index: 10;
+    }
+    .faq-list {
+      max-width: 780px;
+      display: flex; flex-direction: column; gap: .6rem;
+      margin-top: .5rem;
+    }
+    .faq-item {
+      border: 1.5px solid #ede9fe;
+      border-radius: 16px;
+      overflow: hidden;
+      transition: border-color .2s;
+    }
+    .faq-item.open { border-color: #a855f7; }
+    .faq-q {
+      width: 100%;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 1rem;
+      padding: 1.1rem 1.4rem;
+      background: none; border: none; cursor: pointer;
+      font-family: inherit; font-size: .95rem; font-weight: 600;
+      color: #0f0f1a; text-align: left;
+      transition: background .2s;
+    }
+    .faq-q:hover { background: #faf9ff; }
+    .faq-item.open .faq-q { background: #faf9ff; color: #7c3aed; }
+    .faq-icon {
+      flex-shrink: 0; color: #a855f7;
+      transition: transform .3s;
+    }
+    .faq-item.open .faq-icon { transform: rotate(45deg); }
+    .faq-a {
+      max-height: 0; overflow: hidden;
+      font-size: .9rem; color: #6b7280; line-height: 1.7;
+      padding: 0 1.4rem;
+      transition: max-height .35s ease, padding .35s ease;
+    }
+    .faq-item.open .faq-a {
+      max-height: 200px;
+      padding: 0 1.4rem 1.2rem;
+    }
+
+    /* ══════════════════════════════
+       FINAL CTA SECTION
+    ══════════════════════════════ */
+    .final-cta-sec {
+      background: linear-gradient(135deg, #6d28d9 0%, #a855f7 50%, #7c3aed 100%);
+      padding: clamp(5rem, 10vw, 8rem) clamp(1.5rem, 4vw, 3.5rem);
+      position: relative; overflow: hidden; z-index: 10;
+    }
+    .final-cta-inner {
+      max-width: 700px; margin: 0 auto;
+      text-align: center;
+      display: flex; flex-direction: column; align-items: center;
+      position: relative; z-index: 2;
+    }
+    .final-cta-glow {
+      position: absolute;
+      width: 600px; height: 600px;
+      top: 50%; left: 50%; transform: translate(-50%, -50%);
+      background: radial-gradient(circle, rgba(255,255,255,.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .final-cta-heading {
+      font-size: clamp(2.2rem, 5vw, 3.6rem);
+      font-weight: 800; color: #fff;
+      letter-spacing: -.04em; line-height: 1.12;
+      margin-bottom: 1.2rem;
+    }
+    .final-cta-heading em {
+      font-style: normal;
+      background: linear-gradient(120deg, #fde68a, #fbbf24);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .final-cta-sub {
+      font-size: 1rem; color: rgba(255,255,255,.8);
+      line-height: 1.7; margin-bottom: 2.5rem;
+    }
+    .final-cta-btns {
+      display: flex; align-items: center; gap: 1rem;
+      flex-wrap: wrap; justify-content: center;
+      margin-bottom: 2rem;
+    }
+    .btn-cta-white {
+      display: inline-flex; align-items: center; gap: .5rem;
+      padding: .9rem 2.1rem;
+      border-radius: 50px;
+      font-size: 1rem; font-weight: 700;
+      color: #7c3aed; text-decoration: none;
+      background: #fff;
+      box-shadow: 0 8px 30px rgba(0,0,0,.2);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .btn-cta-white:hover { transform: translateY(-3px); box-shadow: 0 14px 40px rgba(0,0,0,.25); }
+    .btn-whatsapp {
+      display: inline-flex; align-items: center; gap: .55rem;
+      padding: .9rem 2.1rem;
+      border-radius: 50px;
+      font-size: 1rem; font-weight: 700;
+      color: #fff; text-decoration: none;
+      background: #25d366;
+      box-shadow: 0 8px 30px rgba(37,211,102,.35);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .btn-whatsapp:hover { transform: translateY(-3px); box-shadow: 0 14px 40px rgba(37,211,102,.45); }
+    .final-cta-proof {
+      display: flex; align-items: center; gap: 1rem;
+      flex-wrap: wrap; justify-content: center;
+    }
+    /* floating WhatsApp sticky button */
+    .wa-sticky {
+      position: fixed; bottom: 28px; right: 28px; z-index: 9999;
+      width: 56px; height: 56px; border-radius: 50%;
+      background: #25d366;
+      display: grid; place-items: center;
+      box-shadow: 0 6px 24px rgba(37,211,102,.5);
+      text-decoration: none;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .wa-sticky:hover { transform: scale(1.1); box-shadow: 0 10px 36px rgba(37,211,102,.6); }
+    .wa-sticky svg { fill: #fff; }
+
+    /* ══════════════════════════════
+       STATS SECTION
+    ══════════════════════════════ */
+    .stats-sec {
+      background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+      padding: 3.5rem clamp(1.5rem, 4vw, 3.5rem);
+      position: relative; z-index: 10;
+    }
+    .stats-inner {
+      max-width: 1280px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: center;
+      gap: 0; flex-wrap: wrap;
+    }
+    .stat-item {
+      display: flex; flex-direction: column; align-items: center;
+      padding: 1.2rem 3.5rem;
+    }
+    .stat-num {
+      font-size: clamp(2.4rem, 5vw, 3.5rem);
+      font-weight: 800; color: #fff;
+      letter-spacing: -.04em;
+      line-height: 1;
+      display: inline-block;
+    }
+    .stat-plus {
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 800; color: #e9d5ff;
+    }
+    .stat-num-wrap {
+      display: flex; align-items: baseline; gap: 2px;
+    }
+    .stat-label {
+      font-size: .85rem; font-weight: 600;
+      color: rgba(255,255,255,.75);
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      margin-top: .5rem;
+    }
+    .stat-divider {
+      width: 1px; height: 60px;
+      background: rgba(255,255,255,.2);
+    }
+    @media (max-width: 640px) {
+      .stat-divider { display: none; }
+      .stat-item { padding: 1rem 2rem; }
+    }
+
+    /* ══════════════════════════════
+       SOFTWARE PREVIEW SECTION
+    ══════════════════════════════ */
+    .preview-sec {
+      background: #f3f3f8;
+      padding: clamp(4rem, 8vw, 7rem) clamp(1.5rem, 4vw, 3.5rem);
+      position: relative; z-index: 10;
+    }
+    .preview-tabs {
+      display: flex; gap: .5rem; flex-wrap: wrap;
+      margin-bottom: 1.8rem;
+    }
+    .prev-tab {
+      display: flex; align-items: center; gap: .5rem;
+      padding: .55rem 1.2rem;
+      border-radius: 50px;
+      border: 1.5px solid #e5e7eb;
+      background: #fff;
+      font-family: inherit; font-size: .85rem; font-weight: 600;
+      color: #6b7280; cursor: pointer;
+      transition: all .2s;
+    }
+    .prev-tab:hover { border-color: #a855f7; color: #7c3aed; }
+    .prev-tab.active {
+      background: linear-gradient(135deg, #a855f7, #7c3aed);
+      border-color: transparent; color: #fff;
+    }
+    .preview-window {
+      background: #fff;
+      border-radius: 20px;
+      border: 1.5px solid #e5e7eb;
+      box-shadow: 0 24px 80px rgba(0,0,0,.1);
+      overflow: hidden;
+    }
+    .browser-bar {
+      background: #f9fafb;
+      border-bottom: 1px solid #f0f0f5;
+      padding: .7rem 1.2rem;
+      display: flex; align-items: center; gap: 1rem;
+    }
+    .browser-dots { display: flex; gap: 5px; }
+    .bd { display: block; width: 10px; height: 10px; border-radius: 50%; }
+    .bd-red { background: #ff5f56; }
+    .bd-yellow { background: #ffbd2e; }
+    .bd-green { background: #27c93f; }
+    .browser-url {
+      flex: 1; max-width: 280px; margin: 0 auto;
+      background: #f0f0f5; border-radius: 6px;
+      padding: .3rem .8rem;
+      font-size: .75rem; color: #9ca3af;
+      display: flex; align-items: center; gap: .4rem;
+    }
+    .prev-screen {
+      display: none; height: 460px; overflow: hidden;
+    }
+    .prev-screen.active { display: flex; }
+
+    /* Shared UI sidebar */
+    .ui-sidebar {
+      width: 52px; background: #1a1a2e;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 1rem 0; gap: 1rem; flex-shrink: 0;
+    }
+    .ui-logo-sm {
+      width: 32px; height: 32px; border-radius: 8px;
+      background: linear-gradient(135deg, #a855f7, #7c3aed);
+      display: grid; place-items: center;
+      font-size: .6rem; font-weight: 800; color: #fff;
+    }
+    .ui-nav-items { display: flex; flex-direction: column; gap: .3rem; margin-top: .5rem; }
+    .ui-nav-item {
+      width: 36px; height: 36px; border-radius: 10px;
+      display: grid; place-items: center;
+      color: rgba(255,255,255,.4); cursor: pointer;
+    }
+    .ui-nav-item.active { background: rgba(168,85,247,.3); color: #c084fc; }
+
+    /* Shared UI main area */
+    .ui-main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    .ui-topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: .9rem 1.2rem;
+      border-bottom: 1px solid #f0f0f5;
+      flex-shrink: 0;
+    }
+    .ui-page-title { font-size: .9rem; font-weight: 700; color: #0f0f1a; }
+    .ui-topbar-right { display: flex; align-items: center; gap: .7rem; }
+    .ui-search-bar {
+      display: flex; align-items: center; gap: .4rem;
+      background: #f3f3f8; border-radius: 8px;
+      padding: .35rem .8rem; font-size: .75rem; color: #9ca3af;
+    }
+    .ui-avatar {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: linear-gradient(135deg, #a855f7, #7c3aed);
+      display: grid; place-items: center;
+      font-size: .6rem; font-weight: 700; color: #fff;
+    }
+    .ui-btn-sm {
+      padding: .35rem .85rem; border-radius: 8px;
+      background: #f3f3f8; font-size: .75rem; font-weight: 600;
+      color: #374151; cursor: pointer; white-space: nowrap;
+    }
+
+    /* Dashboard KPI */
+    .ui-kpi-row {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: .7rem; padding: .8rem 1rem; flex-shrink: 0;
+    }
+    .ui-kpi {
+      background: #faf9ff; border: 1px solid #ede9fe;
+      border-radius: 12px; padding: .7rem .9rem;
+    }
+    .kpi-icon {
+      width: 28px; height: 28px; border-radius: 8px;
+      display: grid; place-items: center; margin-bottom: .4rem;
+    }
+    .kpi-val { font-size: .85rem; font-weight: 800; color: #0f0f1a; }
+    .kpi-lbl { font-size: .65rem; color: #9ca3af; margin-top: 1px; }
+    .kpi-trend { font-size: .65rem; font-weight: 700; margin-top: 2px; }
+    .kpi-trend.up { color: #059669; }
+    .kpi-trend.down { color: #ea580c; }
+
+    .ui-bottom-row {
+      flex: 1; display: grid; grid-template-columns: 1.4fr 1fr;
+      gap: .7rem; padding: 0 1rem .8rem; overflow: hidden;
+      min-height: 0;
+    }
+    .ui-chart-wrap, .ui-recent-wrap {
+      background: #faf9ff; border: 1px solid #ede9fe;
+      border-radius: 12px; padding: .8rem; overflow: hidden;
+    }
+    .ui-chart-title { font-size: .72rem; font-weight: 700; color: #374151; margin-bottom: .6rem; }
+    .ui-bar-chart {
+      display: flex; align-items: flex-end; gap: 5px; height: 100px;
+    }
+    .ui-bar {
+      flex: 1; background: #ede9fe; border-radius: 4px 4px 0 0;
+      display: flex; flex-direction: column; justify-content: flex-end; align-items: center;
+      transition: background .2s; position: relative;
+    }
+    .ui-bar.active { background: linear-gradient(180deg, #a855f7, #7c3aed); }
+    .ui-bar span { font-size: .55rem; color: #9ca3af; margin-top: 3px; position: absolute; bottom: -14px; }
+    .ui-tx-list { display: flex; flex-direction: column; gap: .5rem; }
+    .ui-tx { display: flex; align-items: center; gap: .5rem; }
+    .ui-tx-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .ui-tx-info { flex: 1; }
+    .ui-tx-name { font-size: .7rem; font-weight: 600; color: #0f0f1a; }
+    .ui-tx-time { font-size: .6rem; color: #9ca3af; }
+    .ui-tx-amt { font-size: .72rem; font-weight: 700; }
+    .ui-tx-amt.pos { color: #059669; }
+
+    /* Billing tab */
+    .billing-layout {
+      flex: 1; display: grid; grid-template-columns: 1fr 1fr;
+      gap: .7rem; padding: .8rem 1rem; overflow: hidden; min-height: 0;
+    }
+    .bill-form {
+      background: #faf9ff; border: 1px solid #ede9fe;
+      border-radius: 12px; padding: .8rem;
+      display: flex; flex-direction: column; gap: .4rem; overflow: hidden;
+    }
+    .bill-field label { font-size: .63rem; color: #9ca3af; display: block; margin-bottom: 2px; }
+    .bill-input {
+      background: #f3f3f8; border-radius: 6px;
+      padding: .3rem .6rem; font-size: .72rem; color: #0f0f1a;
+    }
+    .bill-items-head {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+      font-size: .6rem; font-weight: 700; color: #9ca3af;
+      padding: .3rem 0; border-top: 1px solid #ede9fe; margin-top: .2rem;
+    }
+    .bill-item-row {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+      font-size: .67rem; color: #374151; padding: .25rem 0;
+      border-bottom: 1px solid #f3f3f8;
+    }
+    .bill-add-row { font-size: .65rem; color: #a855f7; font-weight: 600; cursor: pointer; margin-top: .2rem; }
+    .bill-total-row {
+      display: flex; justify-content: space-between;
+      font-size: .78rem; font-weight: 800; color: #0f0f1a;
+      border-top: 1.5px solid #ede9fe; padding-top: .4rem; margin-top: auto;
+    }
+    .bill-preview-card {
+      background: #fff; border: 1px solid #ede9fe;
+      border-radius: 12px; padding: 1rem;
+      display: flex; flex-direction: column; gap: .4rem;
+    }
+    .bp-header { display: flex; justify-content: space-between; align-items: center; }
+    .bp-logo { font-size: .8rem; font-weight: 800; color: #7c3aed; }
+    .bp-inv { font-size: .65rem; color: #9ca3af; }
+    .bp-date { font-size: .62rem; color: #9ca3af; }
+    .bp-divider { height: 1px; background: #f0f0f5; }
+    .bp-row { display: flex; justify-content: space-between; font-size: .67rem; color: #374151; }
+    .bp-total { font-weight: 800; color: #0f0f1a; font-size: .78rem; }
+    .bp-actions { display: flex; gap: .5rem; margin-top: .3rem; }
+
+    /* Inventory tab */
+    .inv-search {
+      margin: .6rem 1rem;
+      background: #f3f3f8; border-radius: 8px;
+      padding: .4rem .8rem; font-size: .75rem; color: #9ca3af;
+      display: flex; align-items: center; gap: .4rem; flex-shrink: 0;
+    }
+    .inv-table { flex: 1; overflow: hidden; padding: 0 1rem .8rem; }
+    .inv-head {
+      display: grid; grid-template-columns: 2fr 1.2fr .7fr .7fr 1fr;
+      font-size: .62rem; font-weight: 700; color: #9ca3af;
+      padding: .4rem .6rem; background: #f3f3f8; border-radius: 8px;
+      margin-bottom: .3rem;
+    }
+    .inv-row {
+      display: grid; grid-template-columns: 2fr 1.2fr .7fr .7fr 1fr;
+      font-size: .68rem; color: #374151;
+      padding: .45rem .6rem; border-bottom: 1px solid #f0f0f5;
+      align-items: center;
+    }
+    .inv-badge {
+      font-size: .6rem; font-weight: 700; padding: .2rem .5rem;
+      border-radius: 50px; display: inline-block;
+    }
+    .inv-badge.ok { background: #d1fae5; color: #059669; }
+    .inv-badge.warn { background: #ffedd5; color: #ea580c; }
+    .inv-badge.out { background: #fee2e2; color: #dc2626; }
+
+    /* Reports tab */
+    .reports-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: .7rem; padding: .8rem 1rem; flex-shrink: 0;
+    }
+    .rep-kpi {
+      background: #faf9ff; border: 1px solid #ede9fe;
+      border-radius: 12px; padding: .8rem;
+    }
+    .rep-lbl { font-size: .62rem; color: #9ca3af; margin-bottom: .3rem; }
+    .rep-val { font-size: 1.1rem; font-weight: 800; }
+    .rep-chart-area { flex: 1; padding: 0 1rem .8rem; overflow: hidden; }
+    .rep-bar-chart {
+      display: flex; align-items: flex-end; gap: 10px; height: 120px;
+      background: #faf9ff; border: 1px solid #ede9fe;
+      border-radius: 12px; padding: 1rem;
+    }
+    .rep-bar {
+      flex: 1; height: var(--h); background: #ede9fe;
+      border-radius: 4px 4px 0 0;
+      display: flex; align-items: flex-end; justify-content: center;
+      padding-bottom: 4px;
+    }
+    .rep-bar.active { background: linear-gradient(180deg, #a855f7, #7c3aed); }
+    .rep-bar span { font-size: .6rem; color: #9ca3af; }
+    .rep-bar.active span { color: #e9d5ff; }
+
+    /* Video CTA */
+    .video-cta {
+      margin-top: 2rem;
+      display: flex; align-items: center; gap: 1.2rem;
+      background: #fff;
+      border: 1.5px solid #ede9fe;
+      border-radius: 18px;
+      padding: 1.2rem 1.8rem;
+      flex-wrap: wrap;
+    }
+    .video-play-btn {
+      width: 50px; height: 50px; border-radius: 50%;
+      background: #f3e8ff;
+      display: grid; place-items: center; flex-shrink: 0;
+      cursor: pointer; transition: transform .2s, background .2s;
+    }
+    .video-play-btn:hover { background: #e9d5ff; transform: scale(1.08); }
+    .video-cta-title { font-size: .95rem; font-weight: 700; color: #0f0f1a; }
+    .video-cta-sub { font-size: .82rem; color: #9ca3af; margin-top: 2px; }
+
+    @media (max-width: 760px) {
+      .ui-kpi-row { grid-template-columns: repeat(2, 1fr); }
+      .prev-screen { height: 520px; }
+      .video-cta { flex-direction: column; align-items: flex-start; }
+      .video-cta .btn-cta { margin-left: 0 !important; }
+      .billing-layout { grid-template-columns: 1fr; overflow-y: auto; }
+      .reports-grid { grid-template-columns: 1fr; }
+      .inv-head, .inv-row { grid-template-columns: 2fr 1fr 1fr; }
+      .inv-head span:nth-child(2), .inv-row span:nth-child(2),
+      .inv-head span:nth-child(4), .inv-row span:nth-child(4) { display: none; }
+    }
+    /* ══════════════════════════════
+       FULL MOBILE RESPONSIVE
+    ══════════════════════════════ */
+
+    /* Footer responsive */
+    @media (max-width: 700px) {
+      .footer-top-row {
+        flex-direction: column !important;
+        gap: 2rem !important;
+      }
+      .footer-logo-col {
+        max-width: 100% !important;
+        min-width: unset !important;
+      }
+    }
+
+    /* Pricing grid — 1 column on mobile */
+    @media (max-width: 700px) {
+      .pricing-grid {
+        grid-template-columns: 1fr;
+      }
+      .price-card {
+        max-width: 100%;
+      }
+    }
+
+    /* Features grid — 1 column on mobile */
+    @media (max-width: 600px) {
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+      .solutions-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Stats section — 2 per row on mobile */
+    @media (max-width: 600px) {
+      .stats-inner {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+      }
+      .stat-divider { display: none; }
+      .stat-item { padding: 1.2rem 1rem; }
+    }
+
+    /* Preview tabs — wrap on mobile */
+    @media (max-width: 600px) {
+      .preview-tabs {
+        gap: .4rem;
+      }
+      .prev-tab {
+        font-size: .78rem;
+        padding: .45rem .9rem;
+      }
+      .prev-screen {
+        height: 280px !important;
+      }
+      .video-cta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: .9rem;
+      }
+      .video-cta .btn-cta { margin-left: 0 !important; }
+    }
+
+    /* Solutions / use cases grid */
+    @media (max-width: 700px) {
+      .solutions-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Contact grid */
+    @media (max-width: 700px) {
+      .contact-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Footer — stack columns */
+    @media (max-width: 700px) {
+      footer > div > div:first-child {
+        flex-direction: column !important;
+        gap: 2rem !important;
+      }
+      footer > div > div:first-child > div {
+        max-width: 100% !important;
+      }
+    }
+
+    /* Showcase grid */
+    @media (max-width: 600px) {
+      .showcase-img-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    /* Section headings — smaller on mobile */
+    @media (max-width: 480px) {
+      .section-heading {
+        font-size: 1.6rem;
+      }
+      .section-sub {
+        font-size: .9rem;
+      }
+      .hero-title { font-size: 1.85rem; }
+      .hero-img-wrap { height: 320px; }
+
+      .feat-card { padding: 1.4rem 1.2rem; }
+      .sol-card { padding: 1.4rem 1.2rem; }
+
+      .final-cta-heading { font-size: 2rem; }
+      .final-cta-btns { flex-direction: column; width: 100%; }
+      .btn-cta-white, .btn-whatsapp { width: 100%; justify-content: center; }
+
+      .preview-tabs { flex-wrap: wrap; }
+    }
+
+    /* Nav always full width on all screens — already handled above */
+
+    /* Page wrapper no overflow issue on mobile */
+    @media (max-width: 900px) {
+      .page { overflow-x: hidden; }
+      body { overflow-x: hidden; }
+    }
+
+    /* Stat dividers */
+    @media (max-width: 480px) {
+      .stats-inner {
+        grid-template-columns: 1fr 1fr;
+        gap: 0;
+      }
+      .stat-item { padding: 1rem .8rem; }
+    }
+
+    /* Preview window height on medium tablets */
+    @media (max-width: 760px) and (min-width: 481px) {
+      .prev-screen { height: 380px !important; }
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- BLOBS -->
+  <div class="blob blob-tr-glow"></div>
+  <div class="blob blob-tr"></div>
+  <div class="blob blob-bl"></div>
+
+  <!-- ══ NAV ══ -->
+  <nav>
+    <a class="nav-logo" href="#">
+      <div class="logo-icon">
+        <!-- star / sparkle icon -->
+        <svg viewBox="0 0 24 24">
+          <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"
+                fill="#fff" stroke="none"/>
+        </svg>
+      </div>
+      <span class="logo-text">SoftRent</span>
+    </a>
+
+    <div class="nav-menu-wrap">
+      <ul class="nav-menu">
+        <li><a href="#software">Our Software</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#solutions">Use Cases</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+
+    <a class="btn-trial" href="#">Free Demo&nbsp;↗</a>
+
+    <button class="hamburger" id="ham">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-nav" id="mobileNav">
+    <a href="#software">Our Software</a>
+    <a href="#features">Features</a>
+    <a href="#solutions">Use Cases</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#faq">FAQ</a>
+    <a href="#contact">Contact</a>
+    <a class="btn-trial" href="#">Free Demo ↗</a>
+  </div>
+
+  <!-- ══ HERO ══ -->
+  <section class="hero" id="software">
+
+    <!-- LEFT CONTENT -->
+    <div class="hero-left">
+      <div class="badge-pill">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:.4rem;flex-shrink:0"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        <span>Pakistan's #1 Software Rental Platform</span>
+      </div>
+
+      <h1 class="hero-title">
+        Powerful Software<em class="accent-arrow">↙</em><br/>
+        Rent, Use &amp; Grow<br/>Your Business
+      </h1>
+
+      <p class="hero-desc">
+        Spare Parts, Real Estate, Billing, Point of Sale — we have ready-made software for every business. Rent once and make your business easier.
+      </p>
+
+      <a class="btn-cta" href="#">
+        Explore Software <span class="arrow">↗</span>
+      </a>
+
+      <!-- Social proof -->
+      <div class="hero-social-proof">
+        <div class="sp-avatars">
+          <div class="sp-av" style="background:#e9d5ff;overflow:hidden;padding:0">
+            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block"/>
+          </div>
+          <div class="sp-av" style="background:#e9d5ff;overflow:hidden;padding:0">
+            <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="User" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block"/>
+          </div>
+          <div class="sp-av" style="background:#e9d5ff;overflow:hidden;padding:0">
+            <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="User" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block"/>
+          </div>
+          <div class="sp-av" style="background:#e9d5ff;overflow:hidden;padding:0">
+            <img src="https://randomuser.me/api/portraits/men/76.jpg" alt="User" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block"/>
+          </div>
+          <div class="sp-av sp-av-more">+</div>
+        </div>
+        <div class="sp-text">
+          <div class="sp-stars">★★★★★</div>
+          <div class="sp-label"><strong>1,000+ users</strong> already using SoftRent</div>
+        </div>
+        </div>
+    </div>
+
+    <!-- RIGHT IMAGE -->
+    <div class="hero-right">
+      <div class="hero-img-wrap">
+        <!--
+          ✅ اپنی امیج یہاں لگائیں — src کو اپنی image path سے replace کریں
+          REPLACE src below with your uploaded image path
+        -->
+        <img
+          src="ChatGPT Image Apr 27, 2026, 02_12_30 PM (1).png"
+          alt="Project management hero character with laptop and app icons"
+        />
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ══ SHOWCASE / SOFTWARE SCREENSHOTS ══ -->
+  <section class="showcase-sec">
+    <div class="section-label" style="margin:0 auto 1rem">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="#7c3aed" style="flex-shrink:0"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
+      <span>Our Software in Action</span>
+    </div>
+    <h2 class="section-heading">See What <em>SoftRent</em> Looks Like</h2>
+    <p class="section-sub">Real screenshots from our software — clean, simple, and built for Pakistani businesses.</p>
+    <div style="max-width:900px;margin:0 auto;">
+      <div style="border-radius:24px;overflow:hidden;aspect-ratio:16/9;background:linear-gradient(135deg,#f3e8ff,#ede9fe);display:flex;align-items:center;justify-content:center;box-shadow:0 24px 80px rgba(124,58,237,.13);">
+        <img src="./WhatsApp Image 2026-05-31 at 8.35.51 AM (1).jpeg" alt="SoftRent Software Screenshot"
+          style="width:100%;height:100%;object-fit:cover;display:block;"
+          onerror="this.style.display='none';this.parentElement.innerHTML+='<div style=\'display:flex;flex-direction:column;align-items:center;gap:1rem;\'><svg width=\'64\' height=\'64\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'#a855f7\' stroke-width=\'1.5\'><rect x=\'3\' y=\'3\' width=\'18\' height=\'18\' rx=\'3\'/><circle cx=\'8.5\' cy=\'8.5\' r=\'1.5\'/><polyline points=\'21 15 16 10 5 21\'/></svg><p style=\'color:#a855f7;font-weight:600;font-size:1rem\'>Apni software screenshot yahan lagayein</p></div>'"/>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ FEATURES SECTION ══ -->
+  <section class="features" id="features">
+
+    <div class="section-label">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="#7c3aed" style="flex-shrink:0"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
+      <span>What Our Software Does</span>
+    </div>
+
+    <h2 class="section-heading">
+      Smart Solutions for<br/><em>Every Business</em>
+    </h2>
+
+    <p class="section-sub">
+      We have built powerful, easy-to-use software for different industries that you can rent monthly — no big investment, just start your business.
+    </p>
+
+    <div class="features-grid">
+
+      <div class="feat-card">
+        <div class="feat-icon ic-purple">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/><path d="M14.83 9.17a4 4 0 0 1 0 5.66M9.17 9.17a4 4 0 0 0 0 5.66"/></svg>
+        </div>
+        <div class="feat-title">Spare Parts Management</div>
+        <div class="feat-desc">Warehouse inventory, parts buying & selling, stock alerts and complete billing — all in one place. Perfect for workshops and auto parts shops.</div>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon ic-blue">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <div class="feat-title">Real Estate Software</div>
+        <div class="feat-desc">Property listings, rent calculations, tenant management and payment tracking. Complete solution for estate agents and property dealers.</div>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon ic-green">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        </div>
+        <div class="feat-title">Billing Software</div>
+        <div class="feat-desc">GST invoices, receipts, daily/monthly reports and customer ledger. Fast and accurate billing system for any business.</div>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon ic-orange">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        </div>
+        <div class="feat-title">Point of Sale (POS)</div>
+        <div class="feat-desc">Make quick sales at your shop, manage stock, and see the complete daily summary in one click.</div>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon ic-pink">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#db2777" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 6v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        </div>
+        <div class="feat-title">Rental Management</div>
+        <div class="feat-desc">Rent out vehicles, machines, or any equipment — bookings, due dates, and payments all tracked automatically.</div>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon ic-cyan">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0891b2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div class="feat-title">Cloud Access — Anywhere</div>
+        <div class="feat-desc">Home or office, access your software anytime from your mobile or laptop. Data is secure and backup is always ready.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══ STATS SECTION ══ -->
+  <section class="stats-sec" id="stats">
+    <div class="stats-inner">
+      <div class="stat-item">
+        <div class="stat-num-wrap">
+          <div class="stat-num" data-target="500">0</div>
+          <div class="stat-plus">+</div>
+        </div>
+        <div class="stat-label">Active Users</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <div class="stat-num-wrap">
+          <div class="stat-num" data-target="50">0</div>
+          <div class="stat-plus">+</div>
+        </div>
+        <div class="stat-label">Businesses Served</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <div class="stat-num-wrap">
+          <div class="stat-num" data-target="99">0</div>
+          <div class="stat-plus">%</div>
+        </div>
+        <div class="stat-label">Customer Satisfaction</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <div class="stat-num-wrap">
+          <div class="stat-num" data-target="24">0</div>
+          <div class="stat-plus">/7</div>
+        </div>
+        <div class="stat-label">Support Available</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ SOFTWARE PREVIEW SECTION ══ -->
+  <section class="preview-sec" id="preview">
+    <div class="solutions-inner">
+      <div class="section-label">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="#7c3aed" style="flex-shrink:0"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
+        <span>Software Preview</span>
+      </div>
+      <h2 class="section-heading">See It in <em>Action</em></h2>
+      <p class="section-sub">Clean, modern interface designed for speed. No training needed — your team will be up and running in minutes.</p>
+
+      <!-- Tab switcher -->
+      <div class="preview-tabs">
+        <button class="prev-tab active" data-tab="dashboard">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Dashboard
+        </button>
+        <button class="prev-tab" data-tab="billing">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Billing
+        </button>
+        <button class="prev-tab" data-tab="inventory">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          Inventory
+        </button>
+        <button class="prev-tab" data-tab="reports">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          Reports
+        </button>
+      </div>
+
+      <!-- Preview Window -->
+      <div class="preview-window">
+        <!-- Browser chrome bar -->
+        <div class="browser-bar">
+          <div class="browser-dots">
+            <span class="bd bd-red"></span>
+            <span class="bd bd-yellow"></span>
+            <span class="bd bd-green"></span>
+          </div>
+          <div class="browser-url">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            app.softrent.pk
+          </div>
+          <div style="width:60px"></div>
+        </div>
+
+
+        <!-- Dashboard Tab -->
+        <div class="prev-screen active" id="tab-dashboard">
+          <div style="width:100%;height:100%;overflow:hidden;position:relative;background:#f3f0ff;">
+            <img src="./WhatsApp Image 2026-05-31 at 8.35.51 AM (1).jpeg" alt="Dashboard" style="width:100%;height:100%;object-fit:cover;object-position:top center;display:block;" />
+          </div>
+        </div>
+
+        <!-- Billing Tab -->
+        <div class="prev-screen" id="tab-billing">
+          <div style="width:100%;height:100%;overflow:hidden;position:relative;background:#f8f7ff;">
+            <img src="./WhatsApp Image 2026-05-31 at 8.35.51 AM.jpeg" alt="Billing Software" style="width:100%;height:100%;object-fit:cover;object-position:top center;display:block;" />
+          </div>
+        </div>
+
+        <!-- Inventory Tab -->
+        <div class="prev-screen" id="tab-inventory">
+          <div style="width:100%;height:100%;overflow:hidden;position:relative;background:#f0fdf4;">
+            <img src="./WhatsApp Image 2026-05-31 at 8.35.49 AM.jpeg" alt="Inventory Management" style="width:100%;height:100%;object-fit:cover;object-position:top center;display:block;" />
+          </div>
+        </div>
+
+        <!-- Reports Tab -->
+        <div class="prev-screen" id="tab-reports">
+          <div style="width:100%;height:100%;overflow:hidden;position:relative;background:#eff6ff;">
+            <img src="./WhatsApp Image 2026-05-31 at 8.35.50 AM.jpeg" alt="Sales Reports" style="width:100%;height:100%;object-fit:cover;object-position:top center;display:block;" />
+          </div>
+        </div>
+
+      </div><!-- /preview-window -->
+
+      <!-- Video demo CTA -->
+      <div class="video-cta">
+        <div class="video-play-btn" id="videoBtn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#7c3aed" stroke="none"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        </div>
+        <div>
+          <div class="video-cta-title">Watch Full Demo Video</div>
+          <div class="video-cta-sub">See how SoftRent works in under 3 minutes</div>
+        </div>
+        <a href="#contact" class="btn-cta" style="font-size:.85rem;padding:.65rem 1.4rem;margin-left:auto">Book Live Demo ↗</a>
+      </div>
+
+    </div>
+  </section>
+
+</div><!-- /page -->
+
+  <!-- ══ USE CASES / SOLUTIONS SECTION ══ -->
+  <section class="solutions" id="solutions">
+    <div class="solutions-inner">
+      <div class="section-label">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="#7c3aed" style="flex-shrink:0"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
+        <span>Use Cases / Solutions</span>
+      </div>
+      <h2 class="section-heading">Built for Your <em>Business Type</em></h2>
+      <p class="section-sub">No matter what kind of shop or business you run, SoftRent has a tailored solution ready for you.</p>
+
+      <div class="solutions-grid">
+
+        <div class="sol-card">
+          <div class="sol-icon" style="background:#f3e8ff">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          </div>
+          <div class="sol-body">
+            <div class="sol-title">Retail Shops</div>
+            <div class="sol-desc">From clothing to grocery — manage your inventory, sales, and daily reports with our POS and billing system. Built for the everyday shopkeeper.</div>
+            <ul class="sol-list">
+              <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Fast billing & receipts</li>
+              <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Stock & inventory control</li>
+              <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Daily & monthly sales reports</li>
+              <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Customer ledger management</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="sol-card">
+          <div class="sol-icon" style="background:#d1fae5">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/><circle cx="12" cy="6" r="1" fill="#059669"/></svg>
+          </div>
+          <div class="sol-body">
+            <div class="sol-title">Medical Stores</div>
+            <div class="sol-desc">Track medicine inventory, expiry dates, prescriptions, and generate GST-compliant bills. Keep your pharmacy running smoothly and compliantly.</div>
+            <ul class="sol-list">
+              <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Medicine expiry tracking</li>
+              <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> GST invoice generation</li>
+              <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Low stock alerts</li>
+              <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Supplier & purchase records</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="sol-card">
+          <div class="sol-icon" style="background:#ffedd5">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          </div>
+          <div class="sol-body">
+            <div class="sol-title">Hardware Shops</div>
+            <div class="sol-desc">Manage hundreds of spare parts, tools, and building materials. Track stock levels, purchase history, and generate accurate bills on the spot.</div>
+            <ul class="sol-list">
+              <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Parts & tools inventory</li>
+              <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Purchase & sale tracking</li>
+              <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Bulk item management</li>
+              <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Supplier payment records</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="sol-card">
+          <div class="sol-icon" style="background:#dbeafe">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
+          </div>
+          <div class="sol-body">
+            <div class="sol-title">Small Businesses</div>
+            <div class="sol-desc">Starting out or running a small operation? Get professional software at a fraction of the cost. Scale as you grow — no upfront investment needed.</div>
+            <ul class="sol-list">
+              <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Affordable monthly rent</li>
+              <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Easy setup — no IT team needed</li>
+              <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Cloud-based, accessible anywhere</li>
+              <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Free support & training</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ PRICING SECTION ══ -->
+  <section class="pricing-sec" id="pricing">
+    <div class="solutions-inner">
+      <div class="section-label">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="#7c3aed" style="flex-shrink:0"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
+        <span>Pricing</span>
+      </div>
+      <h2 class="section-heading">Simple, <em>Affordable Plans</em></h2>
+      <p class="section-sub">No hidden fees. No large upfront cost. Just pick a plan and get started today.</p>
+      <div class="pricing-grid">
+        <div class="price-card">
+          <div class="price-name">Rent</div>
+          <div class="price-amount">PKR 2,500<span>/mo</span></div>
+          <div class="price-desc">Perfect for small shops & single-user setups.</div>
+          <ul class="price-features">
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> 1 User Account</li>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Billing & Invoicing</li>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Basic Inventory Management</li>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Point of Sale (POS)</li>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Monthly Sales Reports</li>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> WhatsApp Support</li>
+          </ul>
+          <a class="btn-cta" href="#contact" style="font-size:.88rem;padding:.7rem 1.6rem;margin-top:1.5rem">Get Started ↗</a>
+        </div>
+        <div class="price-card price-card--featured">
+          <div class="price-badge">Most Popular</div>
+          <div class="price-name">Business</div>
+          <div class="price-amount">PKR 3,000<span>/mo</span></div>
+          <div class="price-desc">Multi-user access, full features & priority support.</div>
+          <ul class="price-features">
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.9)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Up to 5 User Accounts</li>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.9)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Everything in Rent Plan</li>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.9)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Advanced Inventory & Stock Alerts</li>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.9)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Customer Ledger & Accounts</li>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.9)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Detailed Profit & Loss Reports</li>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.9)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Cloud Backup & Priority Support</li>
+          </ul>
+          <a class="btn-cta" href="#contact" style="font-size:.88rem;padding:.7rem 1.6rem;margin-top:1.5rem;background:#fff;color:#7c3aed">Get Started ↗</a>
+        </div>
+        <div class="price-card price-card--lifetime">
+          <div class="price-badge" style="background:#f59e0b">Life Time Access</div>
+          <div class="price-name" style="color:rgba(255,255,255,.7)">Lifetime</div>
+          <div class="price-amount">PKR 40,000<span style="color:rgba(255,255,255,.5)">&nbsp;once</span></div>
+          <div class="price-desc" style="color:rgba(255,255,255,.7)">Pay once, use forever. Best value for long-term businesses.</div>
+          <ul class="price-features">
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Unlimited Users</li>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> All Business Plan Features</li>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Free Lifetime Updates</li>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Dedicated Account Manager</li>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Custom Branding / Logo</li>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> No Monthly Fees Ever</li>
+          </ul>
+          <a class="btn-cta" href="#contact" style="font-size:.88rem;padding:.7rem 1.6rem;margin-top:1.5rem;background:linear-gradient(135deg,#f59e0b,#d97706);box-shadow:0 6px 24px rgba(245,158,11,.4)">Buy Now ↗</a>
+        </div>
+
+        <!-- Custom Software Card -->
+        <div class="price-card" style="background:linear-gradient(135deg,#0c1a3a 0%,#1a2d5a 100%);border:2px solid #3b82f6;position:relative;">
+          <div class="price-badge" style="background:linear-gradient(135deg,#3b82f6,#06b6d4);">✦ Custom Build</div>
+          <!-- Glow effect -->
+          <div style="position:absolute;top:-60px;right:-60px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(59,130,246,.25) 0%,transparent 70%);pointer-events:none;"></div>
+          <div class="price-name" style="color:rgba(255,255,255,.65);margin-top:.5rem;">Custom Software</div>
+          <div class="price-amount" style="color:#fff;font-size:1.7rem;">PKR 85,000<span style="color:rgba(255,255,255,.5);font-size:.9rem;">&nbsp;onwards</span></div>
+          <div class="price-desc" style="color:rgba(255,255,255,.65);">Apni zaroorat ke mutabiq bilkul custom software banwaein — sirf aapke liye.</div>
+          <ul class="price-features" style="margin-top:1.2rem;">
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span style="color:rgba(255,255,255,.88);">100% Aapki Requirements par</span></li>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span style="color:rgba(255,255,255,.88);">Custom Features & Modules</span></li>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span style="color:rgba(255,255,255,.88);">Aapka Logo & Branding</span></li>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span style="color:rgba(255,255,255,.88);">Dedicated Developer Support</span></li>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span style="color:rgba(255,255,255,.88);">Free Training & Onboarding</span></li>
+            <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span style="color:rgba(255,255,255,.88);">Lifetime Technical Support</span></li>
+          </ul>
+          <a class="btn-cta" href="#contact" style="font-size:.88rem;padding:.7rem 1.6rem;margin-top:1.5rem;background:linear-gradient(135deg,#3b82f6,#06b6d4);box-shadow:0 6px 24px rgba(59,130,246,.45);">Discuss Project ↗</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ FINAL CTA SECTION ══ -->
+  <section class="final-cta-sec">
+    <div class="final-cta-inner">
+      <div class="final-cta-glow"></div>
+      <div class="section-label" style="border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.1);margin-bottom:1.5rem">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="#fff" style="flex-shrink:0"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        <span style="color:#fff">Get Started Today</span>
+      </div>
+      <h2 class="final-cta-heading">Ready to Grow<br/>Your <em>Business?</em></h2>
+      <p class="final-cta-sub">Join 1,000+ businesses across Pakistan already using SoftRent.<br/>Start your free trial today — no credit card required.</p>
+      <div class="final-cta-btns">
+        <a class="btn-cta-white" href="#contact">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          Start Free Trial
+        </a>
+        <a class="btn-whatsapp" href="https://wa.me/923000000000" target="_blank">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+          Chat on WhatsApp
+        </a>
+      </div>
+      <div class="final-cta-proof">
+        <div class="sp-avatars">
+          <div class="sp-av" style="background:#e9d5ff;overflow:hidden;padding:0;border-color:rgba(255,255,255,.4)">
+            <img src="https://randomuser.me/api/portraits/men/32.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block"/>
+          </div>
+          <div class="sp-av" style="background:#e9d5ff;overflow:hidden;padding:0;border-color:rgba(255,255,255,.4)">
+            <img src="https://randomuser.me/api/portraits/men/45.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block"/>
+          </div>
+          <div class="sp-av" style="background:#e9d5ff;overflow:hidden;padding:0;border-color:rgba(255,255,255,.4)">
+            <img src="https://randomuser.me/api/portraits/women/68.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block"/>
+          </div>
+          <div class="sp-av" style="background:#e9d5ff;overflow:hidden;padding:0;border-color:rgba(255,255,255,.4)">
+            <img src="https://randomuser.me/api/portraits/men/76.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block"/>
+          </div>
+          <div class="sp-av sp-av-more" style="border-color:rgba(255,255,255,.4)">+</div>
+        </div>
+        <span style="color:rgba(255,255,255,.8);font-size:.85rem;font-weight:500">Trusted by 1,000+ businesses across Pakistan</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ FAQ SECTION ══ -->
+  <section class="faq-sec" id="faq">
+    <div class="solutions-inner">
+      <div class="section-label">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="#7c3aed" style="flex-shrink:0"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
+        <span>FAQ</span>
+      </div>
+      <h2 class="section-heading">Frequently Asked <em>Questions</em></h2>
+      <p class="section-sub">Everything you need to know before getting started.</p>
+      <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            <span>What is SoftRent and how does it work?</span>
+            <svg class="faq-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <div class="faq-a">SoftRent is Pakistan's #1 software rental platform. Instead of buying expensive software, you simply pay a small monthly fee and get full access to powerful business management tools — billing, POS, inventory, and more. No installation hassles, no large upfront cost.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            <span>Do I need any technical knowledge to use it?</span>
+            <svg class="faq-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <div class="faq-a">Not at all. Our software is designed for everyday shopkeepers and business owners. The interface is simple, clean, and available in both Urdu and English. We also provide free setup support and training when you sign up.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            <span>Can I try it before paying?</span>
+            <svg class="faq-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <div class="faq-a">Yes! We offer a free demo so you can see exactly how the software works before committing. Just click the "Free Demo" button or contact us on WhatsApp and we'll set it up for you within a few hours.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            <span>Is my data safe and backed up?</span>
+            <svg class="faq-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <div class="faq-a">Absolutely. All your data is stored securely on the cloud with automatic daily backups. Even if your computer crashes or your phone is lost, your data is always safe and accessible from any device.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            <span>What if I want to cancel my subscription?</span>
+            <svg class="faq-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <div class="faq-a">There's no lock-in contract. You can cancel anytime with no hidden fees or penalties. We're confident you'll love the software, but the choice is always yours.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            <span>Which businesses is SoftRent suitable for?</span>
+            <svg class="faq-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <div class="faq-a">SoftRent works for retail shops, medical stores, hardware shops, spare parts dealers, real estate agents, and any small or medium-sized business. If you sell products or services and need billing + inventory management, SoftRent is for you.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ CONTACT SECTION ══ -->
+  <section class="contact-sec" id="contact">
+    <div class="solutions-inner contact-inner">
+      <div class="section-label">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="#7c3aed" style="flex-shrink:0"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
+        <span>Contact</span>
+      </div>
+      <h2 class="section-heading">Get in <em>Touch</em></h2>
+      <p class="section-sub">Ready to get started or have questions? Reach out and our team will respond within 24 hours.</p>
+      <div class="contact-grid">
+        <div class="contact-info">
+          <div class="contact-item">
+            <div class="contact-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.1a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.18 6.18l1.35-1.35a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </div>
+            <div>
+              <div class="contact-label">Phone / WhatsApp</div>
+              <div class="contact-val">+92 300 0000000</div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </div>
+            <div>
+              <div class="contact-label">Email</div>
+              <div class="contact-val">info@softrent.pk</div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div>
+              <div class="contact-label">Location</div>
+              <div class="contact-val">Lahore, Pakistan</div>
+            </div>
+          </div>
+        </div>
+        <div class="contact-form-wrap">
+          <input class="cf-input" type="text" placeholder="Your Name" />
+          <input class="cf-input" type="text" placeholder="Phone / WhatsApp Number" />
+          <select class="cf-input" style="cursor:pointer;color:#374151">
+            <option value="" disabled selected style="color:#9ca3af">Which Software Do You Want to Rent?</option>
+            <option>Spare Parts Management Software</option>
+            <option>Real Estate Management Software</option>
+            <option>Medical Store / Pharmacy Software</option>
+            <option>General Billing &amp; Invoicing Software</option>
+            <option>Point of Sale (POS) Software</option>
+            <option>Retail Shop Management Software</option>
+            <option>Hardware / Building Materials Software</option>
+            <option>Other / Custom Software</option>
+          </select>
+          <textarea class="cf-input cf-textarea" placeholder="Your message or query..."></textarea>
+          <button class="btn-cta" style="width:100%;justify-content:center;font-size:.95rem;border:none;cursor:pointer">Send Message
+            <span class="arrow">↗</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div><!-- /page -->
+
+<!-- ══ FOOTER ══ -->
+<footer style="background:#0f0f1a;padding:3rem clamp(1.5rem,4vw,3.5rem) 0;position:relative;z-index:10;">
+  <div style="max-width:1280px;margin:0 auto;">
+
+    <!-- Top Row -->
+    <div class="footer-top-row" style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:2.5rem;padding-bottom:2.5rem;border-bottom:1px solid rgba(255,255,255,.08);">
+
+      <!-- Logo & Tagline -->
+      <div class="footer-logo-col" style="max-width:280px;min-width:200px;">
+        <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:1rem;">
+          <div style="width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#a855f7,#7c3aed);display:grid;place-items:center;box-shadow:0 4px 14px rgba(124,58,237,.5);">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          </div>
+          <span style="font-size:1.3rem;font-weight:800;color:#fff;letter-spacing:-.02em;">SoftRent</span>
+        </div>
+        <p style="font-size:.87rem;color:rgba(255,255,255,.5);line-height:1.7;">Pakistan's #1 Software Rental Platform — apna business aasaan banaein.</p>
+        <div style="display:flex;gap:.75rem;margin-top:1.4rem;">
+          <a href="#" style="width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.07);display:grid;place-items:center;text-decoration:none;" onmouseover="this.style.background='rgba(168,85,247,.3)'" onmouseout="this.style.background='rgba(255,255,255,.07)'">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="rgba(255,255,255,.7)"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          </a>
+          <a href="#" style="width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.07);display:grid;place-items:center;text-decoration:none;" onmouseover="this.style.background='rgba(168,85,247,.3)'" onmouseout="this.style.background='rgba(255,255,255,.07)'">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="rgba(255,255,255,.7)"><path d="M22.46 6c-.77.35-1.6.58-2.46.69.88-.53 1.56-1.37 1.88-2.38-.83.5-1.75.85-2.72 1.05C18.37 4.5 17.26 4 16 4c-2.35 0-4.27 1.92-4.27 4.29 0 .34.04.67.11.98C8.28 9.09 5.11 7.38 3 4.79c-.37.63-.58 1.37-.58 2.15 0 1.49.75 2.81 1.91 3.56-.71 0-1.37-.2-1.95-.5v.03c0 2.08 1.48 3.82 3.44 4.21a4.22 4.22 0 0 1-1.93.07 4.28 4.28 0 0 0 4 2.98 8.521 8.521 0 0 1-5.33 1.84c-.34 0-.68-.02-1.02-.06C3.44 20.29 5.7 21 8.12 21 16 21 20.33 14.46 20.33 8.79c0-.19 0-.37-.01-.56.84-.6 1.56-1.36 2.14-2.23z"/></svg>
+          </a>
+          <a href="https://wa.me/923000000000" target="_blank" style="width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.07);display:grid;place-items:center;text-decoration:none;" onmouseover="this.style.background='rgba(37,211,102,.3)'" onmouseout="this.style.background='rgba(255,255,255,.07)'">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="rgba(255,255,255,.7)"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Available Software -->
+      <div>
+        <div style="font-size:.78rem;font-weight:700;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.1em;margin-bottom:1.2rem;">Available Software</div>
+        <div style="display:flex;flex-direction:column;gap:.7rem;">
+          <div style="display:flex;align-items:center;gap:.55rem;">
+            <span style="width:6px;height:6px;border-radius:50%;background:#a855f7;flex-shrink:0;"></span>
+            <span style="font-size:.88rem;color:rgba(255,255,255,.6);">Spare Parts Management</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:.55rem;">
+            <span style="width:6px;height:6px;border-radius:50%;background:#a855f7;flex-shrink:0;"></span>
+            <span style="font-size:.88rem;color:rgba(255,255,255,.6);">Real Estate Software</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:.55rem;">
+            <span style="width:6px;height:6px;border-radius:50%;background:#a855f7;flex-shrink:0;"></span>
+            <span style="font-size:.88rem;color:rgba(255,255,255,.6);">Medical / Pharmacy Software</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:.55rem;">
+            <span style="width:6px;height:6px;border-radius:50%;background:#a855f7;flex-shrink:0;"></span>
+            <span style="font-size:.88rem;color:rgba(255,255,255,.6);">Billing & Invoicing Software</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:.55rem;">
+            <span style="width:6px;height:6px;border-radius:50%;background:#a855f7;flex-shrink:0;"></span>
+            <span style="font-size:.88rem;color:rgba(255,255,255,.6);">Point of Sale (POS)</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:.55rem;">
+            <span style="width:6px;height:6px;border-radius:50%;background:#3b82f6;flex-shrink:0;"></span>
+            <span style="font-size:.88rem;color:rgba(255,255,255,.6);">Custom Software Development</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div>
+        <div style="font-size:.78rem;font-weight:700;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.1em;margin-bottom:1.2rem;">Quick Links</div>
+        <div style="display:flex;flex-direction:column;gap:.75rem;">
+          <a href="#features" style="font-size:.9rem;color:rgba(255,255,255,.6);text-decoration:none;" onmouseover="this.style.color='#c084fc'" onmouseout="this.style.color='rgba(255,255,255,.6)'">Features</a>
+          <a href="#solutions" style="font-size:.9rem;color:rgba(255,255,255,.6);text-decoration:none;" onmouseover="this.style.color='#c084fc'" onmouseout="this.style.color='rgba(255,255,255,.6)'">Solutions</a>
+          <a href="#pricing" style="font-size:.9rem;color:rgba(255,255,255,.6);text-decoration:none;" onmouseover="this.style.color='#c084fc'" onmouseout="this.style.color='rgba(255,255,255,.6)'">Pricing</a>
+          <a href="#preview" style="font-size:.9rem;color:rgba(255,255,255,.6);text-decoration:none;" onmouseover="this.style.color='#c084fc'" onmouseout="this.style.color='rgba(255,255,255,.6)'">Demo</a>
+          <a href="#faq" style="font-size:.9rem;color:rgba(255,255,255,.6);text-decoration:none;" onmouseover="this.style.color='#c084fc'" onmouseout="this.style.color='rgba(255,255,255,.6)'">FAQ</a>
+          <a href="#contact" style="font-size:.9rem;color:rgba(255,255,255,.6);text-decoration:none;" onmouseover="this.style.color='#c084fc'" onmouseout="this.style.color='rgba(255,255,255,.6)'">Contact</a>
+        </div>
+      </div>
+
+      <!-- Contact Info -->
+      <div>
+        <div style="font-size:.78rem;font-weight:700;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.1em;margin-bottom:1.2rem;">Contact</div>
+        <div style="display:flex;flex-direction:column;gap:.9rem;">
+          <div style="display:flex;align-items:center;gap:.7rem;">
+            <div style="width:32px;height:32px;border-radius:9px;background:rgba(168,85,247,.15);display:grid;place-items:center;flex-shrink:0;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.1a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.18 6.18l1.35-1.35a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </div>
+            <span style="font-size:.88rem;color:rgba(255,255,255,.6);">+92 300 0000000</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:.7rem;">
+            <div style="width:32px;height:32px;border-radius:9px;background:rgba(168,85,247,.15);display:grid;place-items:center;flex-shrink:0;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </div>
+            <span style="font-size:.88rem;color:rgba(255,255,255,.6);">info@softrent.pk</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:.7rem;">
+            <div style="width:32px;height:32px;border-radius:9px;background:rgba(168,85,247,.15);display:grid;place-items:center;flex-shrink:0;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <span style="font-size:.88rem;color:rgba(255,255,255,.6);">Lahore, Pakistan</span>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /top row -->
+
+    <!-- Bottom Bar -->
+    <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1rem;padding:1.4rem 0 2rem;">
+      <div style="font-size:.82rem;color:rgba(255,255,255,.3);">© 2026 SoftRent. All rights reserved.</div>
+      <div style="display:flex;align-items:center;gap:.45rem;flex-wrap:wrap;">
+        <span style="font-size:.82rem;color:rgba(255,255,255,.35);">Designed &amp; Developed by</span>
+        <span style="font-size:.88rem;font-weight:700;background:linear-gradient(120deg,#a855f7,#ec4899);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">Mudassar Latif</span>
+        <span style="color:rgba(255,255,255,.2);font-size:.8rem;">·</span>
+        <span style="font-size:.88rem;font-weight:700;background:linear-gradient(120deg,#a855f7,#ec4899);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">TechRiwaayat</span>
+      </div>
+    </div>
+
+  </div>
+</footer>
+
+<!-- Floating WhatsApp Button -->
+<a class="wa-sticky" href="https://wa.me/923000000000" target="_blank" title="Chat on WhatsApp">
+  <svg width="28" height="28" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+</a>
+
+<script>
+  // FAQ toggle
+  function toggleFaq(btn) {
+    const item = btn.closest('.faq-item');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  }
+
+  // Stats counter animation
+  const statNums = document.querySelectorAll('.stat-num');
+  const statsSection = document.querySelector('.stats-sec');
+  let animated = false;
+  const animateStats = () => {
+    if (animated) return;
+    const rect = statsSection.getBoundingClientRect();
+    if (rect.top < window.innerHeight - 100) {
+      animated = true;
+      statNums.forEach(el => {
+        const target = parseInt(el.dataset.target);
+        const duration = 1800;
+        const start = performance.now();
+        const tick = (now) => {
+          const progress = Math.min((now - start) / duration, 1);
+          const ease = 1 - Math.pow(1 - progress, 3);
+          el.textContent = Math.floor(ease * target);
+          if (progress < 1) requestAnimationFrame(tick);
+          else el.textContent = target;
+        };
+        requestAnimationFrame(tick);
+      });
+    }
+  };
+  window.addEventListener('scroll', animateStats, { passive: true });
+  animateStats();
+
+  // Preview tab switching
+  document.querySelectorAll('.prev-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.prev-tab').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.prev-screen').forEach(s => s.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    });
+  });
+
+
+  const mobileNav = document.getElementById('mobileNav');
+  const spans = ham.querySelectorAll('span');
+
+  function closeMenu() {
+    mobileNav.classList.remove('open');
+    spans[0].style.transform = '';
+    spans[1].style.opacity   = '1';
+    spans[2].style.transform = '';
+  }
+
+  ham.addEventListener('click', () => {
+    const isOpen = mobileNav.classList.toggle('open');
+    spans[0].style.transform = isOpen ? 'rotate(45deg) translate(5px,5px)' : '';
+    spans[1].style.opacity   = isOpen ? '0' : '1';
+    spans[2].style.transform = isOpen ? 'rotate(-45deg) translate(5px,-5px)' : '';
+  });
+
+  // Close menu when any link inside mobile nav is clicked
+  mobileNav.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', closeMenu);
+  });
+
+  document.addEventListener('click', e => {
+    if (!ham.contains(e.target) && !mobileNav.contains(e.target)) {
+      mobileNav.classList.remove('open');
+      spans.forEach(s => { s.style.transform = ''; s.style.opacity = '1'; });
+    }
+  });
+</script>
+
+</body>
+</html>
